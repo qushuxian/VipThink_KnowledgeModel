@@ -1,0 +1,348 @@
+CREATE DATABASE "vip_think" WITH OWNER = "postgres" TABLESPACE = "pg_default";
+CREATE SCHEMA "dwd" AUTHORIZATION "postgres";
+CREATE SCHEMA "ods" AUTHORIZATION "postgres";
+
+
+
+
+CREATE TABLE "ods"."class_room" (
+  "id" int4 NOT NULL DEFAULT nextval('"ods".class_room_id_seq'::regclass),
+  "class_start_time" timestamp(6) NOT NULL,
+  "class_end_time" timestamp(6) NOT NULL,
+  "create_time" timestamp(6) NOT NULL,
+  "update_time" timestamp(6),
+  "live_id" int8 NOT NULL,
+  "user_id" int8 NOT NULL,
+  "type_name" varchar(255) COLLATE "pg_catalog"."default",
+  "cate_pid" int8,
+  "step_name" varchar(255) COLLATE "pg_catalog"."default",
+  "cn_number" varchar(255) COLLATE "pg_catalog"."default",
+  "cn_numbers" int8,
+  "game_url" varchar(255) COLLATE "pg_catalog"."default",
+  "chapter_id" int8 NOT NULL,
+  "chapter_name" varchar(255) COLLATE "pg_catalog"."default",
+  "course_type" int8,
+  "live_status" int8,
+  "check_status" int8,
+  "chapter_level" varchar(255) COLLATE "pg_catalog"."default",
+  "etl_create_time" timestamp(6) DEFAULT ('now'::text)::timestamp(0) with time zone,
+  CONSTRAINT "class_room_pkey" PRIMARY KEY ("id")
+);
+ALTER TABLE "ods"."class_room" OWNER TO "postgres";
+CREATE INDEX "class_room_chapter_id_idx" ON "ods"."class_room" USING btree (
+  "chapter_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+CREATE INDEX "class_room_class_start_time_idx" ON "ods"."class_room" USING btree (
+  "class_start_time" "pg_catalog"."date_ops" ASC NULLS LAST
+);
+CREATE INDEX "class_room_cn_numbers_idx" ON "ods"."class_room" USING btree (
+  "cn_numbers" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+CREATE INDEX "class_room_course_type_live_status_check_status_idx" ON "ods"."class_room" USING btree (
+  "course_type" "pg_catalog"."int8_ops" ASC NULLS LAST,
+  "live_status" "pg_catalog"."int8_ops" ASC NULLS LAST,
+  "check_status" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+CREATE INDEX "class_room_live_id_idx" ON "ods"."class_room" USING btree (
+  "live_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+CREATE INDEX "class_room_user_id_idx" ON "ods"."class_room" USING btree (
+  "user_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+COMMENT ON COLUMN "ods"."class_room"."class_start_time" IS '上课时间';
+COMMENT ON COLUMN "ods"."class_room"."class_end_time" IS '下课时间';
+COMMENT ON COLUMN "ods"."class_room"."create_time" IS '生产库数据写入时间';
+COMMENT ON COLUMN "ods"."class_room"."update_time" IS '生产库数据更新时间';
+COMMENT ON COLUMN "ods"."class_room"."live_id" IS '课程ID';
+COMMENT ON COLUMN "ods"."class_room"."user_id" IS '用户ID';
+COMMENT ON COLUMN "ods"."class_room"."type_name" IS '课类名称';
+COMMENT ON COLUMN "ods"."class_room"."cate_pid" IS '课类ID';
+COMMENT ON COLUMN "ods"."class_room"."step_name" IS '阶段名称';
+COMMENT ON COLUMN "ods"."class_room"."cn_number" IS '章节编号(讲次)';
+COMMENT ON COLUMN "ods"."class_room"."cn_numbers" IS '第几讲';
+COMMENT ON COLUMN "ods"."class_room"."game_url" IS '课件编码';
+COMMENT ON COLUMN "ods"."class_room"."chapter_id" IS '课件ID';
+COMMENT ON COLUMN "ods"."class_room"."chapter_name" IS '课件名称';
+COMMENT ON COLUMN "ods"."class_room"."course_type" IS '课类1:正课；2:试听课；3:活动课；6:补课';
+COMMENT ON COLUMN "ods"."class_room"."live_status" IS '上课状态 0=待上课，1=上课中，2=已下课 3=已取消';
+COMMENT ON COLUMN "ods"."class_room"."check_status" IS '考勤状态1:签到用户；2:请假用户；3:旷课用户；4:取消用户,该取消为老师主动取消不计算学生课次';
+COMMENT ON COLUMN "ods"."class_room"."chapter_level" IS '课件难度';
+COMMENT ON TABLE "ods"."class_room" IS '课程表';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE TABLE "ods"."chapter_class_online_work" (
+  "live_chapter_id" int8 NOT NULL,
+  "live_chapter_name" varchar(255) COLLATE "pg_catalog"."default",
+  "live_game_url" varchar(255) COLLATE "pg_catalog"."default",
+  "live_difficulty" int8,
+  "work_chapter_id" int8 NOT NULL,
+  "work_game_url" varchar(255) COLLATE "pg_catalog"."default",
+  "work_id" int8,
+  "work_status" int8,
+  "content_module_id" int8,
+  "work_difficulty" int8,
+  "knowledge_id" int8,
+  "subject_level" int8,
+  "subject_status" int8,
+  "subject_type" int8,
+  "subject_difficulty" int8,
+  "etl_create_time" timestamp(6) DEFAULT ('now'::text)::timestamp(0) with time zone
+)
+;
+ALTER TABLE "ods"."chapter_class_online_work"
+  OWNER TO "postgres";
+CREATE INDEX "chapter_class_online_work_live_chapter_id_idx" ON "ods"."chapter_class_online_work" USING btree (
+  "live_chapter_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+CREATE INDEX "chapter_class_online_work_work_chapter_id_idx" ON "ods"."chapter_class_online_work" USING btree (
+  "work_chapter_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+CREATE INDEX "chapter_class_online_work_work_id_idx" ON "ods"."chapter_class_online_work" USING btree (
+  "work_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+COMMENT ON COLUMN "ods"."chapter_class_online_work"."live_chapter_id" IS '直播课课件ID';
+COMMENT ON COLUMN "ods"."chapter_class_online_work"."live_chapter_name" IS '直播课课件名称';
+COMMENT ON COLUMN "ods"."chapter_class_online_work"."live_game_url" IS '直播课课件编码';
+COMMENT ON COLUMN "ods"."chapter_class_online_work"."live_difficulty" IS '直播课课件难度';
+COMMENT ON COLUMN "ods"."chapter_class_online_work"."work_chapter_id" IS '在线作业题目对应的课件ID';
+COMMENT ON COLUMN "ods"."chapter_class_online_work"."work_game_url" IS '在线作业题目对应的课件编码';
+COMMENT ON COLUMN "ods"."chapter_class_online_work"."work_id" IS '在线作业题目ID';
+COMMENT ON COLUMN "ods"."chapter_class_online_work"."work_status" IS '在线作业题目是否禁用 -- 0为禁用，1为启用';
+COMMENT ON COLUMN "ods"."chapter_class_online_work"."content_module_id" IS '在线作业题目内容模块id';
+COMMENT ON COLUMN "ods"."chapter_class_online_work"."work_difficulty" IS '在线作业题目难度';
+COMMENT ON COLUMN "ods"."chapter_class_online_work"."knowledge_id" IS '知识图谱 ID';
+COMMENT ON COLUMN "ods"."chapter_class_online_work"."subject_level" IS '在线作业题目题号（关卡）与online_work_answer_log表的level保持一致';
+COMMENT ON COLUMN "ods"."chapter_class_online_work"."subject_status" IS '0下架，1上架，2删除';
+COMMENT ON COLUMN "ods"."chapter_class_online_work"."subject_type" IS '题目类型 0 普通题 1 挑战题 2 小老师作业';
+COMMENT ON COLUMN "ods"."chapter_class_online_work"."subject_difficulty" IS '难度系数，1-10 ';
+COMMENT ON TABLE "ods"."chapter_class_online_work" IS '知识点应答题-直播课课后作业题目';
+
+
+
+
+
+
+
+
+
+
+
+CREATE TABLE "ods"."chapter_class_online_answer" (
+  "knowledge_id" int8,
+  "chapter_id" int8 NOT NULL,
+  "new_knowledge_id" varchar(255) COLLATE "pg_catalog"."default",
+  "new_knowledge_type" int8,
+  "new_knowledge_subject_level" int8,
+  "new_knowledge_difficulty" int8,
+  "etl_create_time" timestamp(6) DEFAULT ('now'::text)::timestamp(0) with time zone
+)
+;
+ALTER TABLE "ods"."chapter_class_online_answer"
+  OWNER TO "postgres";
+CREATE INDEX "chapter_class_online_answer_chapter_id_idx" ON "ods"."chapter_class_online_answer" USING btree (
+  "chapter_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+CREATE INDEX "chapter_class_online_answer_knowledge_id_idx" ON "ods"."chapter_class_online_answer" USING btree (
+  "knowledge_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+COMMENT ON COLUMN "ods"."chapter_class_online_answer"."knowledge_id" IS '知识点id';
+COMMENT ON COLUMN "ods"."chapter_class_online_answer"."chapter_id" IS '课件id';
+COMMENT ON COLUMN "ods"."chapter_class_online_answer"."new_knowledge_id" IS '课件下的不同关卡ID';
+COMMENT ON COLUMN "ods"."chapter_class_online_answer"."new_knowledge_type" IS '课件课件下的不同答题类型 5例题,6练习,9挑战题';
+COMMENT ON COLUMN "ods"."chapter_class_online_answer"."new_knowledge_subject_level" IS '不同题型的题目ID';
+COMMENT ON COLUMN "ods"."chapter_class_online_answer"."new_knowledge_difficulty" IS '难度';
+COMMENT ON TABLE "ods"."chapter_class_online_answer" IS '知识点应答题-直播课课中答题，原始数据为神策埋点数据';
+
+
+
+
+
+
+
+
+CREATE TABLE "ods"."knowledge_config" (
+  "knowledge_id" int8 NOT NULL,
+  "knowledge_pid" int8,
+  "knowledge_name" varchar(255) COLLATE "pg_catalog"."default",
+  "knowledge_level" int8,
+  "knowledge_tree" varchar(255) COLLATE "pg_catalog"."default",
+  "knowledge_tags" varchar(255) COLLATE "pg_catalog"."default",
+  "etl_create_time" timestamp(6) DEFAULT ('now'::text)::timestamp(0) with time zone
+)
+;
+ALTER TABLE "ods"."knowledge_config" OWNER TO "postgres";
+CREATE INDEX "knowledge_config_knowledge_id_idx" ON "ods"."knowledge_config" USING btree (
+  "knowledge_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+CREATE INDEX "knowledge_config_knowledge_level_idx" ON "ods"."knowledge_config" USING btree (
+  "knowledge_level" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+CREATE INDEX "knowledge_config_knowledge_pid_idx" ON "ods"."knowledge_config" USING btree (
+  "knowledge_pid" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+COMMENT ON COLUMN "ods"."knowledge_config"."knowledge_id" IS '知识点ID';
+COMMENT ON COLUMN "ods"."knowledge_config"."knowledge_pid" IS '父级id';
+COMMENT ON COLUMN "ods"."knowledge_config"."knowledge_name" IS '知识点名称';
+COMMENT ON COLUMN "ods"."knowledge_config"."knowledge_level" IS '知识点层级';
+COMMENT ON COLUMN "ods"."knowledge_config"."knowledge_tree" IS '知识点树结构';
+COMMENT ON COLUMN "ods"."knowledge_config"."knowledge_tags" IS '知识点标签';
+COMMENT ON TABLE "ods"."knowledge_config" IS '知识图谱-数学思维V3';
+
+
+
+
+
+
+
+
+
+
+CREATE TABLE "ods"."questions_room" (
+  "create_time" timestamp(6) NOT NULL,
+  "user_id" int8 NOT NULL,
+  "chapter_id" int8 NOT NULL,
+  "level" varchar(255) COLLATE "pg_catalog"."default",
+  "status" int8,
+  "ave_time" int8,
+  "ave_level_time" int8,
+  "etl_create_time" timestamp(6) DEFAULT ('now'::text)::timestamp(0) with time zone
+)
+;
+ALTER TABLE "ods"."questions_room" OWNER TO "postgres";
+CREATE INDEX "questions_room_chapter_id_idx" ON "ods"."questions_room" USING btree (
+  "chapter_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+CREATE INDEX "questions_room_user_id_idx" ON "ods"."questions_room" USING btree (
+  "user_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+COMMENT ON COLUMN "ods"."questions_room"."create_time" IS '关卡完成答题上报时间';
+COMMENT ON COLUMN "ods"."questions_room"."user_id" IS '学员id';
+COMMENT ON COLUMN "ods"."questions_room"."chapter_id" IS '课件id';
+COMMENT ON COLUMN "ods"."questions_room"."level" IS '关卡ID，对应课中应答题表new_knowledge_id字段';
+COMMENT ON COLUMN "ods"."questions_room"."status" IS '答题状态-- 1是答对 2是答错 3是跳过';
+COMMENT ON COLUMN "ods"."questions_room"."ave_time" IS '答题时长';
+COMMENT ON COLUMN "ods"."questions_room"."ave_level_time" IS '关卡时长';
+COMMENT ON TABLE "ods"."questions_room" IS '上课中实际答题，原始数据源自神策';
+
+
+
+
+
+
+CREATE TABLE "ods"."questions_online_work" (
+  "create_time" timestamp(6) NOT NULL,
+  "user_id" int8,
+  "live_id" int8,
+  "question_id" int8,
+  "level" int8,
+  "answer_img_id" int8,
+  "question_status" int8,
+  "question_time" int8,
+  "etl_create_time" timestamp(6) DEFAULT ('now'::text)::timestamp(0) with time zone
+)
+;
+ALTER TABLE "ods"."questions_online_work"
+  OWNER TO "postgres";
+CREATE INDEX "questions_online_work_live_id_idx" ON "ods"."questions_online_work" USING btree (
+  "live_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+CREATE INDEX "questions_online_work_user_id_idx" ON "ods"."questions_online_work" USING btree (
+  "user_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+COMMENT ON COLUMN "ods"."questions_online_work"."create_time" IS '答题时间';
+COMMENT ON COLUMN "ods"."questions_online_work"."user_id" IS '学员id';
+COMMENT ON COLUMN "ods"."questions_online_work"."live_id" IS '直播ID(live表自增ID)';
+COMMENT ON COLUMN "ods"."questions_online_work"."question_id" IS '作业关联题目ID';
+COMMENT ON COLUMN "ods"."questions_online_work"."level" IS '题号（关卡）与online_work_answer_log表的level保持一致';
+COMMENT ON COLUMN "ods"."questions_online_work"."answer_img_id" IS '答题截图图片ID(admin_attachment 表自增ID）';
+COMMENT ON COLUMN "ods"."questions_online_work"."question_status" IS '答题状态 0=错，1=对';
+COMMENT ON COLUMN "ods"."questions_online_work"."question_time" IS '答题完成时长';
+COMMENT ON TABLE "ods"."questions_online_work" IS '课后作业实际答题';
+
+
+
+
+
+
+
+CREATE TABLE "dwd"."knowledge_should_questions" (
+  "questions_type" int8 NOT NULL,
+  "chapter_id" int8 NOT NULL,
+  "knowledge_id" int8 NOT NULL,
+  "knowledge_name" varchar(255) COLLATE "pg_catalog"."default",
+  "knowledge_level" int8,
+  "knowledge_tree" varchar(255) COLLATE "pg_catalog"."default",
+  "knowledge_pid" int8 NOT NULL,
+  "knowledge_tags" varchar(255) COLLATE "pg_catalog"."default",
+  "knowledge_subject_level" int8 NOT NULL,
+  "knowledge_subject_type" int8 NOT NULL,
+  "knowledge_subject_difficulty" int8 NOT NULL,
+  "etl_create_time" timestamp(6) DEFAULT ('now'::text)::timestamp(0) with time zone
+);
+ALTER TABLE "dwd"."knowledge_should_questions" OWNER TO "postgres";
+COMMENT ON COLUMN "dwd"."knowledge_should_questions"."questions_type" IS '知识点题目应用场景，1课中答题、0课后答题';
+COMMENT ON COLUMN "dwd"."knowledge_should_questions"."chapter_id" IS '课件id';
+COMMENT ON COLUMN "dwd"."knowledge_should_questions"."knowledge_id" IS '末级知识点ID';
+COMMENT ON COLUMN "dwd"."knowledge_should_questions"."knowledge_name" IS '末级知识点名称';
+COMMENT ON COLUMN "dwd"."knowledge_should_questions"."knowledge_level" IS '末级知识点层级';
+COMMENT ON COLUMN "dwd"."knowledge_should_questions"."knowledge_tree" IS '末级知识点的上层树结构';
+COMMENT ON COLUMN "dwd"."knowledge_should_questions"."knowledge_pid" IS '末级知识点的父级id';
+COMMENT ON COLUMN "dwd"."knowledge_should_questions"."knowledge_tags" IS '末级知识点标签';
+COMMENT ON COLUMN "dwd"."knowledge_should_questions"."knowledge_subject_level" IS '末级知识点下的题目题号（关卡）';
+COMMENT ON COLUMN "dwd"."knowledge_should_questions"."knowledge_subject_type" IS '题目类型 questions_type=0(0 普通题 1 挑战题 2 小老师作业)，questions_type=1(5例题,6练习,9挑战题)';
+COMMENT ON COLUMN "dwd"."knowledge_should_questions"."knowledge_subject_difficulty" IS '末级知识点下的题目难度系数';
+COMMENT ON TABLE "dwd"."knowledge_should_questions" IS '末级知识点应答题题目';
+
+
+
+
+
+
+
+
+CREATE TABLE "ods"."subject_testing" (
+  "user_id" int8 NOT NULL,
+  "eva_id" int8 NOT NULL,
+  "eva_code" varchar(255) COLLATE "pg_catalog"."default",
+  "eva_name" varchar(255) COLLATE "pg_catalog"."default",
+  "knowledge_id" int8 NOT NULL,
+  "question_degree" int8 NOT NULL,
+  "first_question_time" timestamp(6),
+  "knowledge_qa_cnt" int8 NOT NULL,
+  "knowledge_qa_success_cnt" int8 NOT NULL,
+  "knowledge_is_grasp" int8 NOT NULL,
+  "etl_create_time" timestamp(6) DEFAULT ('now'::text)::timestamp(0) with time zone
+)
+;
+ALTER TABLE "ods"."subject_testing" OWNER TO "postgres";
+CREATE INDEX "subject_testing_knowledge_id_idx" ON "ods"."subject_testing" USING btree (
+  "knowledge_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+CREATE INDEX "subject_testing_user_id_idx" ON "ods"."subject_testing" USING btree (
+  "user_id" "pg_catalog"."int8_ops" ASC NULLS LAST
+);
+ALTER TABLE "ods"."subject_testing" OWNER TO "postgres";
+COMMENT ON COLUMN "ods"."subject_testing"."user_id" IS '用户ID';
+COMMENT ON COLUMN "ods"."subject_testing"."eva_id" IS '测评课件ID';
+COMMENT ON COLUMN "ods"."subject_testing"."eva_code" IS '课件码';
+COMMENT ON COLUMN "ods"."subject_testing"."eva_name" IS '测评课件名称';
+COMMENT ON COLUMN "ods"."subject_testing"."knowledge_id" IS '测评的知识点ID';
+COMMENT ON COLUMN "ods"."subject_testing"."question_degree" IS '测评难度系数，1-10';
+COMMENT ON COLUMN "ods"."subject_testing"."first_question_time" IS '测评答题第一题题号创建时间';
+COMMENT ON COLUMN "ods"."subject_testing"."knowledge_qa_cnt" IS '专题测评末级知识点测评题目数量';
+COMMENT ON COLUMN "ods"."subject_testing"."knowledge_qa_success_cnt" IS '专题测评末级知识点测评答对题目数量';
+COMMENT ON COLUMN "ods"."subject_testing"."knowledge_is_grasp" IS '专题测评末级知识点测评是否掌握';
+COMMENT ON TABLE "ods"."subject_testing" IS '专题测评-末级知识点掌握情况';
