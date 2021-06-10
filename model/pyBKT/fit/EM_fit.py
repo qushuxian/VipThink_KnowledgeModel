@@ -6,20 +6,20 @@ from fit import M_step
 import os
 
 
-def EM_fit(model, data, tol=None, maxiter=None, parallel=True):
-    print('\n\033[1;30;47m    EM_fit计算中......\n\033[0m')
+def EM_fit(model, data, tol=None, maxiter=None, parallel=True, prints=False):
+    if prints: print('\n\033[1;30;47m    EM_fit计算中......\n\033[0m')
     if tol is None:
         tol = 1e-3
-        print('tol未接收到传入参数，采用默认参数tol=%s' % tol)
+        if prints: print('tol未接收到传入参数，采用默认参数tol=%s' % tol)
     else:
         tol = tol
-        print('tol接收到传入参数tol=%s' % tol)
+        if prints: print('tol接收到传入参数tol=%s' % tol)
     if maxiter is None:
         maxiter = 100
-        print('maxiter未接收到传入的迭代参数，采用默认参数maxiter=%s' % maxiter)
+        if prints: print('maxiter未接收到传入的迭代参数，采用默认参数maxiter=%s' % maxiter)
     else:
         maxiter = maxiter
-        print('maxiter接收到传入参数maxiter=%s' % maxiter)
+        if prints: print('maxiter接收到传入参数maxiter=%s' % maxiter)
 
     # 弃用，202105282301
     # num_subparts = data["data"].shape[0]  # mmm the first dimension of data represents each subpart?? interesting.
@@ -30,9 +30,9 @@ def EM_fit(model, data, tol=None, maxiter=None, parallel=True):
     # 202106011039 新增将每一次迭代的EM参数返回
     model_list = []
     for i in range(maxiter):
-        print('\n\nEM_fit根据maxiter=%s，循环第%s次计算中......' % (maxiter, i))
+        if prints: print('\n\nEM_fit根据maxiter=%s，循环第%s次计算中......' % (maxiter, i))
 
-        print('传参进入E步(根据当前的参数值，计算样本隐藏变量的期望)计算中......')
+        if prints: print('传参进入E步(根据当前的参数值，计算样本隐藏变量的期望)计算中......')
         result = E_step.run(data, model, 1, int(parallel))
         # print("得到的E步期望值：\n", result)
 
@@ -45,21 +45,26 @@ def EM_fit(model, data, tol=None, maxiter=None, parallel=True):
         #     result['all_emission_softcounts'][j] = result['all_emission_softcounts'][j].transpose()
 
         log_likelihoods[i][0] = result['total_loglike']
-        # print("第%s次计算total_loglike=%s" % (i, log_likelihoods[i][0]))
-        # print("第%s次-1次的total_loglike=%s" % (i, log_likelihoods[i - 1][0]))
+        if prints:
+            print("第%s次计算total_loglike=%s" % (i, log_likelihoods[i][0]))
+            print("第%s次-1次的total_loglike=%s" % (i, log_likelihoods[i - 1][0]))
 
         if i > 1 and abs(log_likelihoods[i][0] - log_likelihoods[i - 1][0]) < tol:
-            print("跳出迭代（循环次数%s > 1，且total_loglike%s < tola%s跳出循环）" % (i, abs(log_likelihoods[i][0] - log_likelihoods[i - 1][0]), tol))
+            if prints:
+                print("跳出迭代（循环次数%s > 1，且total_loglike%s < tola%s跳出循环）" % (i, abs(log_likelihoods[i][0] - log_likelihoods[i - 1][0]), tol))
             break
-        print('传参进入M步(根据当前样本的隐藏变量的期望，求解参数的最大似然估计)计算中......')
+        if prints:
+            print('传参进入M步(根据当前样本的隐藏变量的期望，求解参数的最大似然估计)计算中......')
         model = M_step.run(model,
                            result['all_trans_softcounts'],
                            result['all_emission_softcounts'],
-                           result['all_initial_softcounts'])
+                           result['all_initial_softcounts'],
+                           )
         model_list.append({'iter': i, 'values': model})
         # print("得到的M步最大似然估计：\n", model)
-    print('\n\033[1;30;47m    EM(最大似然估计)响应的模型参数是：\n\033[0m',  model)
-    print('EM迭代过程数据：\n',  model_list)
+    if prints:
+        print('\n\033[1;30;47m    EM(最大似然估计)响应的模型参数是：\n\033[0m',  model)
+    # print('EM迭代过程数据：\n',  model_list)
 
     # 20210601新增return model_list
     return model, log_likelihoods[:i + 1], model_list

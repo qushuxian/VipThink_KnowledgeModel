@@ -37,7 +37,7 @@ $$
 slip = P(S) = P(obs_t = 0|L_t=1)
 $$
 
-需要注意的是，$P(L_{0})$虽然表示先验概率，但BKT模型还将$P(L_t)$定义为学生在不同时间下的掌握概率。之后会根据新的答题数据掌握与否重新并更新$P(L_t)$，也可以称之为更新$P(L_t)$的后验概率，计算如下：
+$P(L_{0})$虽然表示先验概率，但BKT模型同时$P(L_t)$定义为学生在不同时间下的掌握概率。之后会根据新的答题数据掌握与否重新并更新$P(L_t)$，也可以称之为更新$P(L_t)$的后验概率，计算如下：
 $$
 P(L_t|obs_t = 1) = \frac{P(L_t)(1-P(S))}{P(L_t)(1-P(S))  +  (1-P(L_t))P(G)}
 $$
@@ -83,7 +83,7 @@ BKT同时支持对不同的的知识点单独进行建模的，理论上来说�
 
 ## BKT模型应用
 
-示例数据（下表仅展现部分）
+示例数据
 
 Row：答题时间序列号
 
@@ -95,22 +95,68 @@ Problem Name：知识点下题目
 
 KC(Default)：知识点
 
-| Row     | Anon Student Id | Problem Name | Correct First Attempt | KC(Default)         |
-| ------- | --------------- | ------------ | --------------------- | ------------------- |
-| 113913  | 0I891Gg         | RATIO2-001   | 1                     | Calculate unit rate |
-| 113923  | 0I891Gg         | RATIO2-001   | 0                     | Calculate unit rate |
-| 113932  | 0I891Gg         | RATIO2-074   | 0                     | Calculate unit rate |
-| 113940  | 0I891Gg         | RATIO2-074   | 1                     | Calculate unit rate |
-| 113949  | 0I891Gg         | RATIO2-069   | 1                     | Calculate unit rate |
-| 113957  | 0I891Gg         | RATIO2-069   | 1                     | Calculate unit rate |
-| 1660187 | 171017OL        | RATIO2-001   | 1                     | Calculate unit rate |
-| 1660197 | 171017OL        | RATIO2-001   | 0                     | Calculate unit rate |
-| 1660205 | 171017OL        | RATIO2-188   | 1                     | Calculate unit rate |
-| 1660212 | 171017OL        | RATIO2-188   | 1                     | Calculate unit rate |
-| 1660221 | 171017OL        | RATIO2-035   | 1                     | Calculate unit rate |
-| 1660229 | 171017OL        | RATIO2-035   | 1                     | Calculate unit rate |
+| Row   | Anon Student Id | Problem Name | Correct First Attempt | KC(Default)         |
+| ----- | --------------- | ------------ | --------------------- | ------------------- |
+| 1927  | 745Yh           | RATIO2-001   | 1                     | Calculate unit rate |
+| 1931  | 745Yh           | RATIO2-001   | 0                     | Calculate unit rate |
+| 1947  | 745Yh           | RATIO2-012   | 0                     | Calculate unit rate |
+| 1948  | 745Yh           | RATIO2-012   | 1                     | Calculate unit rate |
+| 1963  | 745Yh           | RATIO2-054   | 0                     | Calculate unit rate |
+| 1966  | 745Yh           | RATIO2-054   | 1                     | Calculate unit rate |
+| 1978  | 745Yh           | RATIO2-029   | 1                     | Calculate unit rate |
+| 1981  | 745Yh           | RATIO2-029   | 1                     | Calculate unit rate |
+| 1997  | 745Yh           | RATIO2-109   | 1                     | Calculate unit rate |
+| 1998  | 745Yh           | RATIO2-109   | 1                     | Calculate unit rate |
+| 5289  | 3cjD21W         | RATIO2-001   | 1                     | Calculate unit rate |
+| 5300  | 3cjD21W         | RATIO2-001   | 0                     | Calculate unit rate |
+| 5312  | 3cjD21W         | RATIO2-071   | 0                     | Calculate unit rate |
+| 5318  | 3cjD21W         | RATIO2-071   | 0                     | Calculate unit rate |
+| 5332  | 3cjD21W         | RATIO2-099   | 0                     | Calculate unit rate |
+| 5335  | 3cjD21W         | RATIO2-099   | 0                     | Calculate unit rate |
+| 5351  | 3cjD21W         | RATIO2-177   | 1                     | Calculate unit rate |
+| 5352  | 3cjD21W         | RATIO2-177   | 1                     | Calculate unit rate |
+| 5366  | 3cjD21W         | RATIO2-078   | 1                     | Calculate unit rate |
+| 5369  | 3cjD21W         | RATIO2-078   | 1                     | Calculate unit rate |
+| 12464 | 4gJnw14         | RATIO2-001   | 1                     | Calculate unit rate |
+| 12471 | 4gJnw14         | RATIO2-001   | 0                     | Calculate unit rate |
+| 12482 | 4gJnw14         | RATIO2-127   | 0                     | Calculate unit rate |
+| 12488 | 4gJnw14         | RATIO2-127   | 0                     | Calculate unit rate |
+| 12500 | 4gJnw14         | RATIO2-140   | 1                     | Calculate unit rate |
+| 12503 | 4gJnw14         | RATIO2-140   | 1                     | Calculate unit rate |
+| 12522 | 4gJnw14         | RATIO2-061   | 0                     | Calculate unit rate |
+| 12523 | 4gJnw14         | RATIO2-061   | 0                     | Calculate unit rate |
+| 12539 | 4gJnw14         | RATIO2-106   | 0                     | Calculate unit rate |
+| 12541 | 4gJnw14         | RATIO2-106   | 0                     | Calculate unit rate |
+| 12557 | 4gJnw14         | RATIO2-022   | 0                     | Calculate unit rate |
+| 12559 | 4gJnw14         | RATIO2-022   | 0                     | Calculate unit rate |
+| 12575 | 4gJnw14         | RATIO2-180   | 0                     | Calculate unit rate |
+| 12577 | 4gJnw14         | RATIO2-180   | 0                     | Calculate unit rate |
+| 12593 | 4gJnw14         | RATIO2-149   | 1                     | Calculate unit rate |
+| 12594 | 4gJnw14         | RATIO2-149   | 1                     | Calculate unit rate |
+| 12610 | 4gJnw14         | RATIO2-003   | 1                     | Calculate unit rate |
+| 12611 | 4gJnw14         | RATIO2-003   | 0                     | Calculate unit rate |
+| 12623 | 4gJnw14         | RATIO2-156   | 0                     | Calculate unit rate |
+| 12629 | 4gJnw14         | RATIO2-156   | 0                     | Calculate unit rate |
+| 12645 | 4gJnw14         | RATIO2-071   | 0                     | Calculate unit rate |
+| 12647 | 4gJnw14         | RATIO2-071   | 0                     | Calculate unit rate |
+| 12663 | 4gJnw14         | RATIO2-062   | 1                     | Calculate unit rate |
+| 12665 | 4gJnw14         | RATIO2-062   | 0                     | Calculate unit rate |
+| 12681 | 4gJnw14         | RATIO2-131   | 0                     | Calculate unit rate |
+| 12683 | 4gJnw14         | RATIO2-131   | 0                     | Calculate unit rate |
+| 12699 | 4gJnw14         | RATIO2-144   | 1                     | Calculate unit rate |
+| 12700 | 4gJnw14         | RATIO2-144   | 1                     | Calculate unit rate |
+| 12716 | 4gJnw14         | RATIO2-130   | 1                     | Calculate unit rate |
+| 12718 | 4gJnw14         | RATIO2-130   | 0                     | Calculate unit rate |
 
-### Step1 构建模型
+<br>
+
+<br>
+
+### BKT标准模型
+
+*标准模型下也可以对不同的学生创建模型参数*
+
+#### Step1 构建模型
 
 ```python
 model = Model(num_fits=2)
@@ -123,13 +169,15 @@ prior：初始概率$P(L_0)$
 
 <br>
 
-### Step2 拟合模型
+#### Step2 拟合模型
 
 ```python
 model.fit(data=ct_df)
 ```
 
-#### **拟合过程概况分析**
+<br>
+
+**拟合过程概况分析**
 
 ##### 1、根据skill(不同的知识点)循环计算
 
@@ -159,24 +207,26 @@ pi_0_prior，默认为array([[100], [1]])
 ```python
 # num_fits=0
 # 根据拟合传入的参数，gama计算后得到的初始化学习参数和表现参数
-{'prior': 0.4457060630095818, 
- 'learns': array([0.08152828]), 
- 'forgets': array([0.]), 
- 'guesses': array([0.25530859]), 
- 'slips': array([0.04539381]), 
- 'As': array([[[1.        , 0.        ],[0.08152828, 0.91847172]]]), 
- 'emissions': array([[[0.97444928, 0.02555072],[0.01894198, 0.98105802]]]), 
- 'pi_0': array([[9.99578341e-01],[4.21659067e-04]])
+# As参数表示做题时学生对题目答案的知道与不知道的概率情况
+{'prior': 0.07139010598653306,
+ 'learns': array([0.29274635]),
+ 'forgets': array([0.]),
+ 'guesses': array([0.12393248]),
+ 'slips': array([0.07105116]),
+ 'As': array([[[1.        , 0.        ],[0.29274635, 0.70725365]]]),
+ 'emissions': array([[[9.99978873e-01, 2.11273858e-05],[1.83009641e-01, 8.16990359e-01]]]),
+ 'pi_0': array([[0.99606767],[0.00393233]])
 }
+
 # 拟合前若定义初始概率则修正初始化概率
-{'prior': 0.5, 
- 'learns': array([0.08152828]), 
- 'forgets': array([0.]), 
- 'guesses': array([0.25530859]), 
- 'slips': array([0.04539381]), 
- 'As': array([[[1.        , 0.        ],[0.08152828, 0.91847172]]]), 
- 'emissions': array([[[0.97444928, 0.02555072],[0.01894198, 0.98105802]]]), 
- 'pi_0': array([[9.99578341e-01],[4.21659067e-04]])
+{'prior': 0.5,
+ 'learns': array([0.29274635]),
+ 'forgets': array([0.]),
+ 'guesses': array([0.12393248]),
+ 'slips': array([0.07105116]),
+ 'As': array([[[1.        , 0.        ],[0.29274635, 0.70725365]]]),
+ 'emissions': array([[[9.99978873e-01, 2.11273858e-05],[1.83009641e-01, 8.16990359e-01]]]),
+ 'pi_0': array([[0.99606767],[0.00393233]])
 }
 ```
 
@@ -221,48 +271,51 @@ pi_0_prior，默认为array([[100], [1]])
 
 ```python
 # 将修正后的初始化概率和数据代入EM算法
-# 根据EM的求解思路（默认循环100次，收敛值为0.001），迭代求解最大似然估计值
-# num_fits=0求解的最大似然估计参数值
-{'prior': 0.5325490088332778, 
- 'learns': array([0.00132258]), 
+# 根据EM的求解思路（默认循环100次，收敛值为0.001），迭代求解最大似然估计值(迭代计算收敛值越接近于0.001的)
+# num_fits=0求解的最大似然估计模型参数值
+{'prior': 0.48619389261838664,
+ 'learns': array([0.0026586]), 
  'forgets': array([0.]), 
- 'guesses': array([0.31584889]), 
- 'slips': array([0.47342687]), 
- 'As': array([[[0.99867742, 0.        ],[0.00132258, 1.        ]]]), 
- 'emissions': array([[[0.68415111, 0.31584889],[0.47342687, 0.52657313]]]), 
- 'pi_0': array([[0.46745099],[0.53254901]])}
+ 'guesses': array([0.20748567]), 
+ 'slips': array([0.60860979]), 
+ 'As': array([[[0.9973414, 0.       ],[0.0026586, 1.       ]]]), 
+ 'emissions': array([[[0.79251433, 0.20748567],[0.60860979, 0.39139021]]]), 
+ 'pi_0': array([[0.51380611],[0.48619389]])
+}
+
 
 
 # num_fits=1
 # 根据拟合传入的参数，gama计算后得到的初始化学习参数和表现参数
-{'prior': 0.717138422013306, 
- 'learns': array([0.04719056]), 
+{'prior': 0.10392079593943615, 
+ 'learns': array([0.01300255]), 
  'forgets': array([0.]), 
- 'guesses': array([0.04869282]), 
- 'slips': array([0.23690063]), 
- 'As': array([[[1.        , 0.        ],[0.04719056, 0.95280944]]]), 
- 'emissions': array([[[0.98643378, 0.01356622],[0.02114708, 0.97885292]]]), 
- 'pi_0': array([[0.9806825],[0.0193175]])
+ 'guesses': array([0.1229036]), 
+ 'slips': array([0.04678131]), 
+ 'As': array([[[1.        , 0.        ],[0.01300255, 0.98699745]]]), 
+ 'emissions': array([[[0.97935994, 0.02064006],[0.13622284, 0.86377716]]]), 
+ 'pi_0': array([[0.99825376],[0.00174624]])
 }
 # 修正num_fits=1初始化概率
 {'prior': 0.5, 
- 'learns': array([0.04719056]), 
+ 'learns': array([0.01300255]), 
  'forgets': array([0.]), 
- 'guesses': array([0.04869282]), 
- 'slips': array([0.23690063]), 
- 'As': array([[[1.        , 0.        ],[0.04719056, 0.95280944]]]), 
- 'emissions': array([[[0.98643378, 0.01356622],[0.02114708, 0.97885292]]]), 
- 'pi_0': array([[0.9806825],[0.0193175]])
+ 'guesses': array([0.1229036]), 
+ 'slips': array([0.04678131]), 
+ 'As': array([[[1.        , 0.        ],[0.01300255, 0.98699745]]]), 
+ 'emissions': array([[[0.97935994, 0.02064006],[0.13622284, 0.86377716]]]), 
+ 'pi_0': array([[0.99825376],[0.00174624]])
 }
 # num_fits=1求解的最大似然估计参数值
-{'prior': 0.5325701327119163, 
- 'learns': array([0.00132127]), 
+{'prior': 0.630972526818325, 
+ 'learns': array([0.01029455]), 
  'forgets': array([0.]), 
- 'guesses': array([0.31587496]), 
- 'slips': array([0.47339745]), 
- 'As': array([[[0.99867873, 0.        ],[0.00132127, 1.        ]]]), 
- 'emissions': array([[[0.68412504, 0.31587496],[0.47339745, 0.52660255]]]), 
- 'pi_0': array([[0.46742987],[0.53257013]])}
+ 'guesses': array([0.25736531]), 
+ 'slips': array([0.52360559]), 
+ 'As': array([[[0.98970545, 0.        ],[0.01029455, 1.        ]]]), 
+ 'emissions': array([[[0.74263469, 0.25736531],[0.52360559, 0.47639441]]]), 
+ 'pi_0': array([[0.36902747],[0.63097253]])
+}
 ```
 
 ##### 2、拟合后得到学习参数和表现参数
@@ -271,14 +324,14 @@ pi_0_prior，默认为array([[100], [1]])
 
 ```python
 # 得到四个参数
-{'prior': 0.5325490088332778, 
- 'learns': array([0.00132258]), 
+{'prior': 0.630972526818325, 
+ 'learns': array([0.01029455]), 
  'forgets': array([0.]), 
- 'guesses': array([0.31584889]), 
- 'slips': array([0.47342687]), 
- 'As': array([[[0.99867742, 0.        ],[0.00132258, 1.        ]]]), 
- 'emissions': array([[[0.68415111, 0.31584889],[0.47342687, 0.52657313]]]), 
- 'pi_0': array([[0.46745099],[0.53254901]]), 
+ 'guesses': array([0.25736531]), 
+ 'slips': array([0.52360559]), 
+ 'As': array([[[0.98970545, 0.        ],[0.01029455, 1.        ]]]), 
+ 'emissions': array([[[0.74263469, 0.25736531],[0.52360559, 0.47639441]]]), 
+ 'pi_0': array([[0.36902747],[0.63097253]]), 
  'resource_names': {'default': 1}, 
  'gs_names': {'default': 1}
 }
@@ -288,31 +341,31 @@ pi_0_prior，默认为array([[100], [1]])
 ## 拟合效果评估
 print(model.evaluate(data=ct_df, metric=["auc", "rmse", "accuracy", mean_absolute_error]))
 out:
-    [0.568276160978505, 0.5087188905220124, 0.4733548264744927, 0.5036820125332191]
+    [0.515422077922078, 0.4997171327602213, 0.56, 0.4849974700561834]
 
 # 返回拟合后的模型参数
 print(model.params())
 out:
     知识点       			参数    题目名称 value
-0  Calculate unit rate    prior  default 0.5325490088332778
-1  Calculate unit rate   learns  default 0.00132258
-2  Calculate unit rate  guesses  default 0.31584889
-3  Calculate unit rate    slips  default 0.47342687
+0  Calculate unit rate    prior  default 0.630972526818325
+1  Calculate unit rate   learns  default 0.01029455
+2  Calculate unit rate  guesses  default 0.25736531
+3  Calculate unit rate    slips  default 0.52360559
 4  Calculate unit rate  forgets  default 0.00000
 ```
 
 <br>
 
-### Step3 效果评估
+#### Step3 效果评估
 
 在业务实际应用中最终是需要知道知识点掌握与否，得到的是一个分类结果（0 | 1），但模型计算是根据知识点下$obs_t$计算不同时间下prior的后验概率，因此评估模型的表现状况只能根据原始的答题(正确=1 | 错误=0)与prior后验概率对比计算并对结果进行评估，评估指标：
 
 ```python
 # 后验概率默认阈值为0.5的准确性评估
-auc = .5682763103302735
-rmse = .5087202856284727
-accuracy = .4733548264744927
-mae = 5036829422644872
+auc = .515422077922078
+rmse = .4997171327602213
+accuracy = .56
+mae = 0.4849974700561834
 ```
 
 ```
@@ -324,15 +377,16 @@ rmse：
 	
 accuracy：
 	准确率（正确预测的样本数占总预测样本数的比值，它不考虑预测的样本是正例还是负例），作为参考评估项。
+	
 mae：
 	平均绝对误差，表示预测值与观测值之间绝对误差的平均值，计意义上值无限接近于0代表分类结果表现越好
 ```
 
 <br>
 
-### Step4 数据预测
+#### Step4 数据预测
 
-根据拟合后得到的学习和表现参数prior=0.5325490088332778，learns=0.00132258，guesses=0.31584889，slips=0.47342687，按照贝叶斯知识追踪公式推导计算答题掌握（state_predictions）情况：
+根据拟合后得到的学习和表现参数prior=0.630972526818325，learns=0.01029455，guesses=0.25736531，slips=0.52360559，按照贝叶斯知识追踪公式推导计算答题掌握（state_predictions）情况：
 $$
 prior = P(L_{0})
 $$
@@ -349,7 +403,7 @@ $$
 slip = P(S) = P(obs_t = 0|L_t=1)
 $$
 
-计算过程中还将$P(L_t)$定义为学生在不同$obs_t$时间下答题的掌握概率，之后会根据并更新$P(L_t)$，也可以称之为更新$P(L_t)$的后验概率，计算如下：
+计算过程中将$P(L_t)$定义为学生在不同$obs_t$时间下答题的掌握概率，之后会根据并更新$P(L_t)$，也可以称之为更新$P(L_t)$的后验概率，计算如下：
 $$
 P(L_t|obs_t = 1) = \frac{P(L_t)(1-P(S))}{P(L_t)(1-P(S))  +  (1-P(L_t))P(G)}
 $$
@@ -363,29 +417,68 @@ $$
 P(L_{t+1}) = P(L_t|obs_t) + (1-P(L_t|obs_t))P(T)
 $$
 
-**选择9条数据展示预测结果如下：**
-
 *手动计算_state是按照公式推导计算得出的，与模型预测的state_predictions完全一致。*
 
-| Row     | Anon Student Id | Problem Name | Correct First  Attempt | KC(Default)         | state_predictions | 手动计算_state |
-| ------- | --------------- | ------------ | ---------------------- | ------------------- | ----------------- | -------------- |
-| 113913  | 0I891Gg         | RATIO2-001   | 1                      | Calculate unit rate | 0.53255           | 0.53255        |
-| 113923  | 0I891Gg         | RATIO2-001   | 0                      | Calculate unit rate | 0.65555           | 0.65555        |
-| 113932  | 0I891Gg         | RATIO2-074   | 0                      | Calculate unit rate | 0.56898           | 0.56898        |
-| 113940  | 0I891Gg         | RATIO2-074   | 1                      | Calculate unit rate | 0.47808           | 0.47808        |
-| 113949  | 0I891Gg         | RATIO2-069   | 1                      | Calculate unit rate | 0.60482           | 0.60482        |
-| 113957  | 0I891Gg         | RATIO2-069   | 1                      | Calculate unit rate | 0.71881           | 0.71881        |
-| 1660187 | 171017OL        | RATIO2-001   | 1                      | Calculate unit rate | 0.53255           | 0.81020        |
-| 1660197 | 171017OL        | RATIO2-001   | 0                      | Calculate unit rate | 0.65555           | 0.87696        |
-| 1660205 | 171017OL        | RATIO2-188   | 1                      | Calculate unit rate | 0.56898           | 0.83165        |
+| Row   | Anon Student Id | Problem Name | Correct First  Attempt | KC(Default)         | state_predictions | 手动计算_state |
+| ----- | --------------- | ------------ | ---------------------- | ------------------- | ----------------- | -------------- |
+| 5289  | 3cjD21W         | RATIO2-001   | 1                      | Calculate unit rate | 0.630972527       | 0.63097        |
+| 5300  | 3cjD21W         | RATIO2-001   | 0                      | Calculate unit rate | 0.762373433       | 0.76237        |
+| 5312  | 3cjD21W         | RATIO2-071   | 0                      | Calculate unit rate | 0.696599968       | 0.69660        |
+| 5318  | 3cjD21W         | RATIO2-071   | 0                      | Calculate unit rate | 0.622078712       | 0.62208        |
+| 5332  | 3cjD21W         | RATIO2-099   | 0                      | Calculate unit rate | 0.541924872       | 0.54192        |
+| 5335  | 3cjD21W         | RATIO2-099   | 0                      | Calculate unit rate | 0.460393834       | 0.46039        |
+| 5351  | 3cjD21W         | RATIO2-177   | 1                      | Calculate unit rate | 0.382038047       | 0.38204        |
+| 5352  | 3cjD21W         | RATIO2-177   | 1                      | Calculate unit rate | 0.538460504       | 0.53846        |
+| 5366  | 3cjD21W         | RATIO2-078   | 1                      | Calculate unit rate | 0.686756661       | 0.68676        |
+| 5369  | 3cjD21W         | RATIO2-078   | 1                      | Calculate unit rate | 0.804337966       | 0.80434        |
+| 12464 | 4gJnw14         | RATIO2-001   | 1                      | Calculate unit rate | 0.630972527       | 0.63097        |
+| 12471 | 4gJnw14         | RATIO2-001   | 0                      | Calculate unit rate | 0.762373433       | 0.76237        |
+| 12482 | 4gJnw14         | RATIO2-127   | 0                      | Calculate unit rate | 0.696599968       | 0.69660        |
+| 12488 | 4gJnw14         | RATIO2-127   | 0                      | Calculate unit rate | 0.622078712       | 0.62208        |
+| 12500 | 4gJnw14         | RATIO2-140   | 1                      | Calculate unit rate | 0.541924872       | 0.54192        |
+| 12503 | 4gJnw14         | RATIO2-140   | 1                      | Calculate unit rate | 0.689735201       | 0.68974        |
+| 12522 | 4gJnw14         | RATIO2-061   | 0                      | Calculate unit rate | 0.806508014       | 0.80651        |
+| 12523 | 4gJnw14         | RATIO2-061   | 0                      | Calculate unit rate | 0.748731232       | 0.74873        |
+| 12539 | 4gJnw14         | RATIO2-106   | 0                      | Calculate unit rate | 0.680838367       | 0.68084        |
+| 12541 | 4gJnw14         | RATIO2-106   | 0                      | Calculate unit rate | 0.604758175       | 0.60476        |
+| 12557 | 4gJnw14         | RATIO2-022   | 0                      | Calculate unit rate | 0.523909362       | 0.52391        |
+| 12559 | 4gJnw14         | RATIO2-022   | 0                      | Calculate unit rate | 0.442696327       | 0.44270        |
+| 12575 | 4gJnw14         | RATIO2-180   | 0                      | Calculate unit rate | 0.36560229        | 0.36560        |
+| 12577 | 4gJnw14         | RATIO2-180   | 0                      | Calculate unit rate | 0.296248306       | 0.29625        |
+| 12593 | 4gJnw14         | RATIO2-149   | 1                      | Calculate unit rate | 0.236810127       | 0.23681        |
+| 12594 | 4gJnw14         | RATIO2-149   | 1                      | Calculate unit rate | 0.371360213       | 0.37136        |
+| 12610 | 4gJnw14         | RATIO2-003   | 1                      | Calculate unit rate | 0.527243506       | 0.52724        |
+| 12611 | 4gJnw14         | RATIO2-003   | 0                      | Calculate unit rate | 0.677029511       | 0.67703        |
+| 12623 | 4gJnw14         | RATIO2-156   | 0                      | Calculate unit rate | 0.600602782       | 0.60060        |
+| 12629 | 4gJnw14         | RATIO2-156   | 0                      | Calculate unit rate | 0.519620507       | 0.51962        |
+| 12645 | 4gJnw14         | RATIO2-071   | 0                      | Calculate unit rate | 0.438515909       | 0.43852        |
+| 12647 | 4gJnw14         | RATIO2-071   | 0                      | Calculate unit rate | 0.361748689       | 0.36175        |
+| 12663 | 4gJnw14         | RATIO2-062   | 1                      | Calculate unit rate | 0.292874247       | 0.29287        |
+| 12665 | 4gJnw14         | RATIO2-062   | 0                      | Calculate unit rate | 0.439786346       | 0.43979        |
+| 12681 | 4gJnw14         | RATIO2-131   | 0                      | Calculate unit rate | 0.362918651       | 0.36292        |
+| 12683 | 4gJnw14         | RATIO2-131   | 0                      | Calculate unit rate | 0.293897711       | 0.29390        |
+| 12699 | 4gJnw14         | RATIO2-144   | 1                      | Calculate unit rate | 0.234842252       | 0.23484        |
+| 12700 | 4gJnw14         | RATIO2-144   | 1                      | Calculate unit rate | 0.368859566       | 0.36886        |
+| 12716 | 4gJnw14         | RATIO2-130   | 1                      | Calculate unit rate | 0.524594169       | 0.52459        |
+| 12718 | 4gJnw14         | RATIO2-130   | 0                      | Calculate unit rate | 0.674713316       | 0.67471        |
+| 1927  | 745Yh           | RATIO2-001   | 1                      | Calculate unit rate | 0.630972527       | 0.63097        |
+| 1931  | 745Yh           | RATIO2-001   | 0                      | Calculate unit rate | 0.762373433       | 0.76237        |
+| 1947  | 745Yh           | RATIO2-012   | 0                      | Calculate unit rate | 0.696599968       | 0.69660        |
+| 1948  | 745Yh           | RATIO2-012   | 1                      | Calculate unit rate | 0.622078712       | 0.62208        |
+| 1963  | 745Yh           | RATIO2-054   | 0                      | Calculate unit rate | 0.755442123       | 0.75544        |
+| 1966  | 745Yh           | RATIO2-054   | 1                      | Calculate unit rate | 0.688571442       | 0.68857        |
+| 1978  | 745Yh           | RATIO2-029   | 1                      | Calculate unit rate | 0.80566097        | 0.80566        |
+| 1981  | 745Yh           | RATIO2-029   | 1                      | Calculate unit rate | 0.885896777       | 0.88590        |
+| 1997  | 745Yh           | RATIO2-109   | 1                      | Calculate unit rate | 0.935614224       | 0.93561        |
+| 1998  | 745Yh           | RATIO2-109   | 1                      | Calculate unit rate | 0.964524422       | 0.96452        |
 
 *由于模型预测的是知识点下的每道题答题数据，后续还需要根据$obs_t$中state满足业务条件再计算知识点掌握情况。*
 
 <br>
 
-### Step5 预测结果应用
+#### Step5 预测结果应用
 
-#### <span id="ng_state">1. 求解末级知识点掌握情况</span>
+##### <span id="ng_state">1. 求解末级知识点掌握情况</span>
 
 ```python
 # 默认后验概率>=0.85为掌握知识点
@@ -418,13 +511,366 @@ def state_sift(data, group_list, seed=0.85):
 
 <br>
 
+### BKT遗忘模型
+
+遗忘模型的拟合过程和标准模型相同，都是需要生成默认的伽马分布参数，在到EM算法(最大似然估计)中进行迭代，之后在每次迭代中计算收敛效果最好的参数返回给模型。
+
+标准模型是假设用户在某个知识点下学习后不会存在遗忘的情况，然而该假设有违现实情况，因此推出BKT遗忘模型。遗忘模型的计算逻辑同标准模型类型，不相同的是在计算不同$obs_t$时间下答题的掌握概率是会加入forgets参数。
+
+##### 遗忘模型1
+
+```python
+# 拟合模型
+model.fit(data=ct_df, forgets=True)
+## 拟合效果评估
+print(model.evaluate(data=ct_df, metric=["auc", "rmse", "accuracy", mean_absolute_error]))
+out:
+    [0.6501623376623378, 0.4546819771358794, 0.7, 0.42175252609804015]
+
+# 返回拟合后的模型参数
+print(model.params())
+out:
+             知识点       参数     题目名称   value
+0  Calculate unit rate    prior  default 0.99593
+1  Calculate unit rate   learns  default 0.26663
+2  Calculate unit rate  guesses  default 0.07648
+3  Calculate unit rate    slips  default 0.06403
+4  Calculate unit rate  forgets  default 0.32394
+```
+
+##### 遗忘模型2
+
+```python
+# 拟合模型
+model.fit(data=ct_df, forgets=True, multigs=True)
+## 拟合效果评估
+print(model.evaluate(data=ct_df, metric=["auc", "rmse", "accuracy", mean_absolute_error]))
+out:
+    [0.573051948051948, 0.4967055058027041, 0.54, 0.4874383632631643]
+
+# 返回拟合后的模型参数
+print(model.params())
+out:
+             知识点       参数     题目名称   value
+0   Calculate unit rate    prior     default 0.86605
+1   Calculate unit rate   learns     default 0.14179
+2   Calculate unit rate  guesses  RATIO2-001 0.35568
+3   Calculate unit rate  guesses  RATIO2-003 0.22775
+4   Calculate unit rate  guesses  RATIO2-012 0.39629
+5   Calculate unit rate  guesses  RATIO2-022 0.04852
+6   Calculate unit rate  guesses  RATIO2-029 0.50000
+7   Calculate unit rate  guesses  RATIO2-054 0.19361
+8   Calculate unit rate  guesses  RATIO2-061 0.03705
+9   Calculate unit rate  guesses  RATIO2-062 0.34233
+10  Calculate unit rate  guesses  RATIO2-071 0.15522
+11  Calculate unit rate  guesses  RATIO2-078 0.50000
+12  Calculate unit rate  guesses  RATIO2-099 0.16378
+13  Calculate unit rate  guesses  RATIO2-106 0.04419
+14  Calculate unit rate  guesses  RATIO2-109 0.50000
+15  Calculate unit rate  guesses  RATIO2-127 0.09192
+16  Calculate unit rate  guesses  RATIO2-130 0.34159
+17  Calculate unit rate  guesses  RATIO2-131 0.23492
+18  Calculate unit rate  guesses  RATIO2-140 0.50000
+19  Calculate unit rate  guesses  RATIO2-144 0.50000
+20  Calculate unit rate  guesses  RATIO2-149 0.50000
+21  Calculate unit rate  guesses  RATIO2-156 0.11329
+22  Calculate unit rate  guesses  RATIO2-177 0.50000
+23  Calculate unit rate  guesses  RATIO2-180 0.07482
+24  Calculate unit rate    slips  RATIO2-001 0.13395
+25  Calculate unit rate    slips  RATIO2-003 0.52251
+26  Calculate unit rate    slips  RATIO2-012 0.60497
+27  Calculate unit rate    slips  RATIO2-022 0.50000
+28  Calculate unit rate    slips  RATIO2-029 0.27647
+29  Calculate unit rate    slips  RATIO2-054 0.36703
+30  Calculate unit rate    slips  RATIO2-061 0.50000
+31  Calculate unit rate    slips  RATIO2-062 0.49875
+32  Calculate unit rate    slips  RATIO2-071 0.50000
+33  Calculate unit rate    slips  RATIO2-078 0.47779
+34  Calculate unit rate    slips  RATIO2-099 0.50000
+35  Calculate unit rate    slips  RATIO2-106 0.50000
+36  Calculate unit rate    slips  RATIO2-109 0.31250
+37  Calculate unit rate    slips  RATIO2-127 0.50000
+38  Calculate unit rate    slips  RATIO2-130 0.48364
+39  Calculate unit rate    slips  RATIO2-131 0.50000
+40  Calculate unit rate    slips  RATIO2-140 0.98728
+41  Calculate unit rate    slips  RATIO2-144 0.56322
+42  Calculate unit rate    slips  RATIO2-149 0.78023
+43  Calculate unit rate    slips  RATIO2-156 0.50000
+44  Calculate unit rate    slips  RATIO2-177 0.55189
+45  Calculate unit rate    slips  RATIO2-180 0.50000
+46  Calculate unit rate  forgets     default 0.27307
+```
+
+##### 遗忘模型3
+
+```python
+# 拟合模型
+model.fit(data=ct_df, forgets=True, multilearn=True)
+## 拟合效果评估
+print(model.evaluate(data=ct_df, metric=["auc", "rmse", "accuracy", mean_absolute_error]))
+out:
+    [0.6055194805194806, 0.48765844772660205, 0.6, 0.4689732719268253]
+
+# 返回拟合后的模型参数
+print(model.params())
+out:
+             知识点       参数     题目名称   value
+0   Calculate unit rate    prior     default 0.99322
+1   Calculate unit rate   learns  RATIO2-001 0.77033
+2   Calculate unit rate   learns  RATIO2-003 0.15760
+3   Calculate unit rate   learns  RATIO2-012 0.95755
+4   Calculate unit rate   learns  RATIO2-022 0.01247
+5   Calculate unit rate   learns  RATIO2-029 0.86496
+6   Calculate unit rate   learns  RATIO2-054 0.46550
+7   Calculate unit rate   learns  RATIO2-061 0.35676
+8   Calculate unit rate   learns  RATIO2-062 0.13004
+9   Calculate unit rate   learns  RATIO2-071 0.26314
+10  Calculate unit rate   learns  RATIO2-078 0.30777
+11  Calculate unit rate   learns  RATIO2-099 0.09044
+12  Calculate unit rate   learns  RATIO2-106 0.13084
+13  Calculate unit rate   learns  RATIO2-109 0.76054
+14  Calculate unit rate   learns  RATIO2-127 0.66004
+15  Calculate unit rate   learns  RATIO2-130 0.28458
+16  Calculate unit rate   learns  RATIO2-131 0.06178
+17  Calculate unit rate   learns  RATIO2-140 0.43048
+18  Calculate unit rate   learns  RATIO2-144 0.63391
+19  Calculate unit rate   learns  RATIO2-149 0.26538
+20  Calculate unit rate   learns  RATIO2-156 0.09018
+21  Calculate unit rate   learns  RATIO2-177 0.04220
+22  Calculate unit rate   learns  RATIO2-180 0.00466
+23  Calculate unit rate  guesses     default 0.26861
+24  Calculate unit rate    slips     default 0.32190
+25  Calculate unit rate  forgets  RATIO2-001 0.11202
+26  Calculate unit rate  forgets  RATIO2-003 0.27670
+27  Calculate unit rate  forgets  RATIO2-012 0.40612
+28  Calculate unit rate  forgets  RATIO2-022 0.44983
+29  Calculate unit rate  forgets  RATIO2-029 0.15194
+30  Calculate unit rate  forgets  RATIO2-054 0.38183
+31  Calculate unit rate  forgets  RATIO2-061 0.33758
+32  Calculate unit rate  forgets  RATIO2-062 0.24046
+33  Calculate unit rate  forgets  RATIO2-071 0.91920
+34  Calculate unit rate  forgets  RATIO2-078 0.03709
+35  Calculate unit rate  forgets  RATIO2-099 0.98879
+36  Calculate unit rate  forgets  RATIO2-106 0.54747
+37  Calculate unit rate  forgets  RATIO2-109 0.04969
+38  Calculate unit rate  forgets  RATIO2-127 0.96143
+39  Calculate unit rate  forgets  RATIO2-130 0.18794
+40  Calculate unit rate  forgets  RATIO2-131 0.60905
+41  Calculate unit rate  forgets  RATIO2-140 0.08996
+42  Calculate unit rate  forgets  RATIO2-144 0.65017
+43  Calculate unit rate  forgets  RATIO2-149 0.79023
+44  Calculate unit rate  forgets  RATIO2-156 0.62460
+45  Calculate unit rate  forgets  RATIO2-177 0.15572
+46  Calculate unit rate  forgets  RATIO2-180 0.98914
+```
+
+##### 遗忘模型4
+
+```python
+# 拟合模型
+model.fit(data=ct_df, forgets=True, multigs=True, multilearn=True)
+## 拟合效果评估
+print(model.evaluate(data=ct_df, metric=["auc", "rmse", "accuracy", mean_absolute_error]))
+out:
+    [0.512987012987013, 0.4978063585954633, 0.56, 0.4870418360737846]
+
+# 返回拟合后的模型参数
+print(model.params())
+out:
+             知识点       参数     题目名称   value
+0   Calculate unit rate    prior     default 0.99322
+1   Calculate unit rate   learns  RATIO2-001 0.56733
+2   Calculate unit rate   learns  RATIO2-003 0.50615
+3   Calculate unit rate   learns  RATIO2-012 0.83132
+4   Calculate unit rate   learns  RATIO2-022 0.04457
+5   Calculate unit rate   learns  RATIO2-029 0.41400
+6   Calculate unit rate   learns  RATIO2-054 0.96344
+7   Calculate unit rate   learns  RATIO2-061 0.08963
+8   Calculate unit rate   learns  RATIO2-062 0.25379
+9   Calculate unit rate   learns  RATIO2-071 0.09654
+10  Calculate unit rate   learns  RATIO2-078 0.73033
+11  Calculate unit rate   learns  RATIO2-099 0.02123
+12  Calculate unit rate   learns  RATIO2-106 0.03207
+13  Calculate unit rate   learns  RATIO2-109 0.16777
+14  Calculate unit rate   learns  RATIO2-127 0.12526
+15  Calculate unit rate   learns  RATIO2-130 0.20930
+16  Calculate unit rate   learns  RATIO2-131 0.12417
+17  Calculate unit rate   learns  RATIO2-140 0.11986
+18  Calculate unit rate   learns  RATIO2-144 0.05200
+19  Calculate unit rate   learns  RATIO2-149 0.07593
+20  Calculate unit rate   learns  RATIO2-156 0.18384
+21  Calculate unit rate   learns  RATIO2-177 0.07777
+22  Calculate unit rate   learns  RATIO2-180 0.03350
+23  Calculate unit rate  guesses  RATIO2-001 0.00112
+24  Calculate unit rate  guesses  RATIO2-003 0.14918
+25  Calculate unit rate  guesses  RATIO2-012 0.16540
+26  Calculate unit rate  guesses  RATIO2-022 0.04391
+27  Calculate unit rate  guesses  RATIO2-029 0.50000
+28  Calculate unit rate  guesses  RATIO2-054 0.02024
+29  Calculate unit rate  guesses  RATIO2-061 0.08901
+30  Calculate unit rate  guesses  RATIO2-062 0.17642
+31  Calculate unit rate  guesses  RATIO2-071 0.09349
+32  Calculate unit rate  guesses  RATIO2-078 0.50000
+33  Calculate unit rate  guesses  RATIO2-099 0.02066
+34  Calculate unit rate  guesses  RATIO2-106 0.03217
+35  Calculate unit rate  guesses  RATIO2-109 0.50000
+36  Calculate unit rate  guesses  RATIO2-127 0.15142
+37  Calculate unit rate  guesses  RATIO2-130 0.49076
+38  Calculate unit rate  guesses  RATIO2-131 0.12772
+39  Calculate unit rate  guesses  RATIO2-140 0.50000
+40  Calculate unit rate  guesses  RATIO2-144 0.50000
+41  Calculate unit rate  guesses  RATIO2-149 0.50000
+42  Calculate unit rate  guesses  RATIO2-156 0.18315
+43  Calculate unit rate  guesses  RATIO2-177 0.50000
+44  Calculate unit rate  guesses  RATIO2-180 0.03284
+45  Calculate unit rate    slips  RATIO2-001 0.00012
+46  Calculate unit rate    slips  RATIO2-003 0.18140
+47  Calculate unit rate    slips  RATIO2-012 0.10885
+48  Calculate unit rate    slips  RATIO2-022 0.50000
+49  Calculate unit rate    slips  RATIO2-029 0.70165
+50  Calculate unit rate    slips  RATIO2-054 0.02891
+51  Calculate unit rate    slips  RATIO2-061 0.50000
+52  Calculate unit rate    slips  RATIO2-062 0.69554
+53  Calculate unit rate    slips  RATIO2-071 0.50000
+54  Calculate unit rate    slips  RATIO2-078 0.07385
+55  Calculate unit rate    slips  RATIO2-099 0.50000
+56  Calculate unit rate    slips  RATIO2-106 0.50000
+57  Calculate unit rate    slips  RATIO2-109 0.63046
+58  Calculate unit rate    slips  RATIO2-127 0.50000
+59  Calculate unit rate    slips  RATIO2-130 0.49272
+60  Calculate unit rate    slips  RATIO2-131 0.50000
+61  Calculate unit rate    slips  RATIO2-140 0.89847
+62  Calculate unit rate    slips  RATIO2-144 0.83850
+63  Calculate unit rate    slips  RATIO2-149 0.82739
+64  Calculate unit rate    slips  RATIO2-156 0.50000
+65  Calculate unit rate    slips  RATIO2-177 0.60260
+66  Calculate unit rate    slips  RATIO2-180 0.50000
+67  Calculate unit rate  forgets  RATIO2-001 0.99533
+68  Calculate unit rate  forgets  RATIO2-003 0.58350
+69  Calculate unit rate  forgets  RATIO2-012 0.83370
+70  Calculate unit rate  forgets  RATIO2-022 0.96879
+71  Calculate unit rate  forgets  RATIO2-029 0.90067
+72  Calculate unit rate  forgets  RATIO2-054 0.78980
+73  Calculate unit rate  forgets  RATIO2-061 0.93249
+74  Calculate unit rate  forgets  RATIO2-062 0.81350
+75  Calculate unit rate  forgets  RATIO2-071 0.93465
+76  Calculate unit rate  forgets  RATIO2-078 0.11669
+77  Calculate unit rate  forgets  RATIO2-099 0.99230
+78  Calculate unit rate  forgets  RATIO2-106 0.96515
+79  Calculate unit rate  forgets  RATIO2-109 0.09960
+80  Calculate unit rate  forgets  RATIO2-127 0.12069
+81  Calculate unit rate  forgets  RATIO2-130 0.18352
+82  Calculate unit rate  forgets  RATIO2-131 0.78667
+83  Calculate unit rate  forgets  RATIO2-140 0.98902
+84  Calculate unit rate  forgets  RATIO2-144 0.66926
+85  Calculate unit rate  forgets  RATIO2-149 0.75392
+86  Calculate unit rate  forgets  RATIO2-156 0.85096
+87  Calculate unit rate  forgets  RATIO2-177 0.52413
+88  Calculate unit rate  forgets  RATIO2-180 0.99554
+```
+
+##### 遗忘模型5
+
+```python
+# 拟合模型
+model.fit(data=ct_df, forgets=True, multigs=True, multilearn='Anon Student Id')
+## 拟合效果评估
+print(model.evaluate(data=ct_df, metric=["auc", "rmse", "accuracy", mean_absolute_error]))
+out:
+    [0.612012987012987, 0.46453497987968884, 0.68, 0.4174941980036101]
+
+# 返回拟合后的模型参数
+print(model.params())
+out:
+             知识点       参数     题目名称   value
+0   Calculate unit rate    prior     default 0.93692
+1   Calculate unit rate   learns     3cjD21W 0.27710
+2   Calculate unit rate   learns     4gJnw14 0.09922
+3   Calculate unit rate   learns       745Yh 0.48110
+4   Calculate unit rate  guesses  RATIO2-001 0.17818
+5   Calculate unit rate  guesses  RATIO2-003 0.03876
+6   Calculate unit rate  guesses  RATIO2-012 0.51791
+7   Calculate unit rate  guesses  RATIO2-022 0.07810
+8   Calculate unit rate  guesses  RATIO2-029 0.50000
+9   Calculate unit rate  guesses  RATIO2-054 0.38312
+10  Calculate unit rate  guesses  RATIO2-061 0.06490
+11  Calculate unit rate  guesses  RATIO2-062 0.16550
+12  Calculate unit rate  guesses  RATIO2-071 0.15846
+13  Calculate unit rate  guesses  RATIO2-078 0.50000
+14  Calculate unit rate  guesses  RATIO2-099 0.21216
+15  Calculate unit rate  guesses  RATIO2-106 0.07523
+16  Calculate unit rate  guesses  RATIO2-109 0.50000
+17  Calculate unit rate  guesses  RATIO2-127 0.07419
+18  Calculate unit rate  guesses  RATIO2-130 0.18945
+19  Calculate unit rate  guesses  RATIO2-131 0.08795
+20  Calculate unit rate  guesses  RATIO2-140 0.50000
+21  Calculate unit rate  guesses  RATIO2-144 0.50000
+22  Calculate unit rate  guesses  RATIO2-149 0.50000
+23  Calculate unit rate  guesses  RATIO2-156 0.07812
+24  Calculate unit rate  guesses  RATIO2-177 0.50000
+25  Calculate unit rate  guesses  RATIO2-180 0.09300
+26  Calculate unit rate    slips  RATIO2-001 0.06308
+27  Calculate unit rate    slips  RATIO2-003 0.70977
+28  Calculate unit rate    slips  RATIO2-012 0.53033
+29  Calculate unit rate    slips  RATIO2-022 0.50000
+30  Calculate unit rate    slips  RATIO2-029 0.15137
+31  Calculate unit rate    slips  RATIO2-054 0.10773
+32  Calculate unit rate    slips  RATIO2-061 0.50000
+33  Calculate unit rate    slips  RATIO2-062 0.77267
+34  Calculate unit rate    slips  RATIO2-071 0.50000
+35  Calculate unit rate    slips  RATIO2-078 0.82410
+36  Calculate unit rate    slips  RATIO2-099 0.50000
+37  Calculate unit rate    slips  RATIO2-106 0.50000
+38  Calculate unit rate    slips  RATIO2-109 0.18773
+39  Calculate unit rate    slips  RATIO2-127 0.50000
+40  Calculate unit rate    slips  RATIO2-130 0.83003
+41  Calculate unit rate    slips  RATIO2-131 0.50000
+42  Calculate unit rate    slips  RATIO2-140 0.99027
+43  Calculate unit rate    slips  RATIO2-144 0.95168
+44  Calculate unit rate    slips  RATIO2-149 0.83439
+45  Calculate unit rate    slips  RATIO2-156 0.50000
+46  Calculate unit rate    slips  RATIO2-177 0.83765
+47  Calculate unit rate    slips  RATIO2-180 0.50000
+48  Calculate unit rate  forgets     3cjD21W 0.81178
+49  Calculate unit rate  forgets     4gJnw14 0.61816
+50  Calculate unit rate  forgets       745Yh 0.22710
+```
+
+<br>
+
+##### 5个遗忘模型对比
+
+![image-20210608155237483](../../../../pythonProject/MachineLearning/static_files/image-20210608155237483.png)
+
+##### 遗忘模型的数据预测
+
+```python
+# 以标准模型为例
+model.fit(data=ct_df, forgets=True, multigs=True)
+
+# 返回拟合后的模型参数
+print(model.params())
+out:
+           知识点       参数     题目名称   value
+0  Calculate unit rate    prior  default 0.99867
+1  Calculate unit rate   learns  default 0.28408
+2  Calculate unit rate  guesses  default 0.03146
+3  Calculate unit rate    slips  default 0.02190
+4  Calculate unit rate  forgets  default 0.35487
+```
 
 
 
+<br>
 
+<br>
 
+## 参考资料
 
+[1] https://zhuanlan.zhihu.com/p/28298205
 
+[2] https://zhuanlan.zhihu.com/p/28298944
 
+[3] https://www.doc88.com/p-9724727219497.html
 
-
+[4] https://arxiv.org/pdf/2105.00385.pdf

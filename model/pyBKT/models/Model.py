@@ -23,8 +23,8 @@ pd.options.display.float_format = '{:,.5f}'.format
 
 class Model:
     MODELS_BKT = ['multilearn', 'multiprior', 'multipair', 'multigs']
-    MODEL_ARGS = ['parallel', 'num_fits', 'seed', 'defaults'] + MODELS_BKT
-    FIT_ARGS = ['skills', 'num_fits', 'defaults', 'parallel', 'forgets', 'preload'] + MODELS_BKT
+    MODEL_ARGS = ['parallel', 'num_fits', 'seed', 'defaults', 'print'] + MODELS_BKT
+    FIT_ARGS = ['skills', 'num_fits', 'defaults', 'parallel', 'forgets', 'preload', 'print'] + MODELS_BKT
     CV_ARGS = FIT_ARGS + ['folds', 'seed']
     DEFAULTS = {'num_fits': 5,
                 'defaults': None,
@@ -33,6 +33,7 @@ class Model:
                 'seed': random.randint(0, 1e8),
                 'folds': 5,
                 'forgets': False,
+                'print': True,
                 'model_type': [False] * len(MODELS_BKT)}
     DEFAULTS_BKT = {'order_id': 'order_id',
                     'skill_name': 'skill_name',
@@ -57,12 +58,13 @@ class Model:
         Model(parallel=True, num_fits=5, seed=42, defaults=None)
 
         """
+        self.print = None
         self.fit_model = None
         self.fit_em_list = None  # 20210601新增
         self.manual_param_init = False
         self._check_args(Model.MODEL_ARGS, kwargs)
         self.keep = {}
-        self._update_param(['parallel', 'num_fits', 'seed', 'defaults'], kwargs, keep=True)
+        self._update_param(['parallel', 'num_fits', 'seed', 'defaults', 'print'], kwargs, keep=True)
         self._update_param('model_type', self._update_defaults(kwargs), keep=True)
 
     def fit(self, data_path=None, data=None, **kwargs):
@@ -106,14 +108,14 @@ class Model:
         self.manual_param_init = True
         all_data = self._data_helper(data_path, data, self.defaults, self.skills, self.model_type)
         self._update_param(['skills'], {'skills': list(all_data.keys())})
-        fit_em_model_list = []
+        fit_em_model_list = {}
         for skill in all_data:
-            print("\n\033[1;30;41mfit_model skills = '%s' ......\n\033[0m" % skill)
+            if self.print: print("\n\033[1;30;41mfit_model skills = '%s' ......\n\033[0m" % skill)
             fit_model, fit_em_list = self._fit(all_data[skill], skill, self.forgets,
-                                                preload=kwargs['preload'] if 'preload' in kwargs else False)
+                                               preload=kwargs['preload'] if 'preload' in kwargs else False)
             self.fit_model[skill] = fit_model    # 20210601修改
 
-            fit_em_model_list.append({'skills': str(skill), 'values': list(fit_em_list)})    # 20210601新增
+            fit_em_model_list.update({'skills': (skill), 'values': list(fit_em_list)})    # 20210601新增
         self.fit_em_list = fit_em_model_list    # 20210601新增
         self.manual_param_init = False
 
@@ -154,7 +156,7 @@ class Model:
         df['correct_predictions'] = 0.5
         df['state_predictions'] = 0.5
 
-        print("\n\n\033[1;30;47mpredict......\n\033[0m")
+        if self.print: print("\n\n\033[1;30;47mpredict......\n\033[0m")
         for skill in all_data:
             # print(self.fit_model[skill])
             # print(all_data[skill])
@@ -390,14 +392,16 @@ class Model:
         num_fit_initializations = self.num_fits
         best_likelihood = float("-inf")
         best_model = None
-        print('\033[1;30;47m拟合模型传入的resource_names(模型参数：num_learns):\033[0m', data["resource_names"], '\033[1;30;47m     数量为:\033[0m', num_learns)
-        print('\033[1;30;47m拟合模型传入的gs_names(模型参数：num_gs):\033[0m', data["gs_names"], '\033[1;30;47m     数量为:\033[0m', num_gs)
-        print('\033[1;30;47m拟合模型传入的num_fits:\033[0m', num_fit_initializations)
+        if self.print:
+            print('\033[1;30;47m拟合模型传入的resource_names(模型参数：num_learns):\033[0m', data["resource_names"], '\033[1;30;47m     数量为:\033[0m', num_learns)
+            print('\033[1;30;47m拟合模型传入的gs_names(模型参数：num_gs):\033[0m', data["gs_names"], '\033[1;30;47m     数量为:\033[0m', num_gs)
+            print('\033[1;30;47m拟合模型传入的num_fits:\033[0m', num_fit_initializations)
         fit_em_list = []
         for i in range(num_fit_initializations):
-            print('\n\033[1;30;43m    num_fits %s ......\n\033[0m' % i)
-            print('\033[1;30;47m    根据拟合模型传入的num_learns和num_gs的数量向model_uni函数请求初始化参数......\n\033[0m')
-            fitmodel = random_model_uni.random_model_uni(num_resources=num_learns, num_subparts=num_gs)
+            if self.print:
+                print('\n\033[1;30;43m    num_fits %s ......\n\033[0m' % i)
+                print('\033[1;30;47m    根据拟合模型传入的num_learns和num_gs的数量向model_uni函数请求初始化参数......\n\033[0m')
+            fitmodel = random_model_uni.random_model_uni(num_resources=num_learns, num_subparts=num_gs, prints=self.print)
 
             if forgets:
                 fitmodel["forgets"] = np.random.uniform(size=fitmodel["forgets"].shape)
@@ -407,26 +411,27 @@ class Model:
                 for var in self.fit_model[skill]:
                     if var in fitmodel:
                         fitmodel[var] = self.fit_model[skill][var]
-
-            print('\n\033[1;30;47m    拟合模型修正的初始化参数并传递给EM_fit（期望最大化EM函数）进行拟合运算:\n\033[0m', fitmodel)
+            if self.print:
+                print('\n\033[1;30;47m    拟合模型修正的初始化参数并传递给EM_fit（期望最大化EM函数）进行拟合运算:\n\033[0m', fitmodel)
             if not preload:
                 # print('传递给EM_fit的修正的初始化参数:\n', fitmodel)
-                fitmodel, log_likelihoods, fitmodel_list = EM_fit.EM_fit(model=fitmodel, data=data, parallel=self.parallel)
+                fitmodel, log_likelihoods, fitmodel_list = EM_fit.EM_fit(model=fitmodel, data=data,
+                                                                         parallel=self.parallel, prints=self.print)
 
                 if log_likelihoods[-1] > best_likelihood:
                     best_likelihood = log_likelihoods[-1]
                     best_model = fitmodel
-                    fit_em_list.append({'num_fit': str(i), 'values': list(fitmodel_list)})
             else:
                 best_model = fitmodel
-                fit_em_list.append({'num_fit': str(i), 'values': list(fitmodel_list)})
+            fit_em_list.append({'num_fit': 'fits_' + str(i), 'values': list(fitmodel_list)})
+
         fit_model = best_model
         fit_model["learns"] = fit_model["As"][:, 1, 0]
         fit_model["forgets"] = fit_model["As"][:, 0, 1]
         fit_model["prior"] = fit_model["pi_0"][1][0]
         fit_model["resource_names"] = data["resource_names"]
         fit_model["gs_names"] = data["gs_names"]
-        print('\n\033[1;30;47m知识点【%s】模型拟合结束后返回的参数值:\n\033[0m\n' % skill, fit_model)
+        if self.print: print('\n\033[1;30;47m知识点【%s】模型拟合结束后返回的参数值:\n\033[0m\n' % skill, fit_model)
         return fit_model, fit_em_list
 
     def _predict(self, model, data):

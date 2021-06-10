@@ -1,7 +1,7 @@
 import numpy as np
 
 def run(model, trans_softcounts, emission_softcounts, init_softcounts):
-    # print('M_step接收的参数分别是：\nall_trans_softcounts=%s,\nall_emission_softcounts=%s,\nall_initial_softcounts=%s'
+    # print('M_step接收的参数分别是：\ntrans_softcounts=%s,\nemission_softcounts=%s,\ninitial_softcounts=%s'
     #       % (trans_softcounts, emission_softcounts, init_softcounts))
     # print('M_step接收的模型是：', model)
     z = np.sum(trans_softcounts, axis=1) == 0
