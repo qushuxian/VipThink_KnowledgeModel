@@ -13,7 +13,6 @@
 │   ├── Incremental.py 增量同步
 │   ├── Initialize.py 初始化
 ├── model 知识点模型
-│   ├── NCCR
 │   ├── README.md 模型说明及模型探索研究说明
 │   ├── pyBKT
 └── static_files  静态文件

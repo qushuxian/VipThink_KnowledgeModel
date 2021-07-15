@@ -13,18 +13,18 @@ import pandas as pd
 import random
 import pickle
 import urllib.request as urllib2
-from generate import random_model_uni
-from fit import EM_fit, predict_onestep
-from util import data_helper, check_data, metrics
-from util import crossvalidate
-import json
-pd.options.display.float_format = '{:,.5f}'.format
+from pyBKT.generate import random_model_uni
+from pyBKT.fit import EM_fit, predict_onestep
+from pyBKT.util import data_helper, check_data, metrics
+from pyBKT.util import crossvalidate
+from title.print_title import print_title
+pd.options.display.float_format = '{:,.10f}'.format
 
 
 class Model:
     MODELS_BKT = ['multilearn', 'multiprior', 'multipair', 'multigs']
     MODEL_ARGS = ['parallel', 'num_fits', 'seed', 'defaults', 'print'] + MODELS_BKT
-    FIT_ARGS = ['skills', 'num_fits', 'defaults', 'parallel', 'forgets', 'preload', 'print'] + MODELS_BKT
+    FIT_ARGS = ['skills', 'num_fits', 'defaults', 'parallel', 'forgets', 'preload'] + MODELS_BKT
     CV_ARGS = FIT_ARGS + ['folds', 'seed']
     DEFAULTS = {'num_fits': 5,
                 'defaults': None,
@@ -110,7 +110,7 @@ class Model:
         self._update_param(['skills'], {'skills': list(all_data.keys())})
         fit_em_model_list = {}
         for skill in all_data:
-            if self.print: print("\n\033[1;30;41mfit_model skills = '%s' ......\n\033[0m" % skill)
+            if self.print: print(print_title('fit_model skills = {0} '.format(skill), colour='danger'))
             fit_model, fit_em_list = self._fit(all_data[skill], skill, self.forgets,
                                                preload=kwargs['preload'] if 'preload' in kwargs else False)
             self.fit_model[skill] = fit_model    # 20210601修改
@@ -393,14 +393,14 @@ class Model:
         best_likelihood = float("-inf")
         best_model = None
         if self.print:
-            print('\033[1;30;47m拟合模型传入的resource_names(模型参数：num_learns):\033[0m', data["resource_names"], '\033[1;30;47m     数量为:\033[0m', num_learns)
-            print('\033[1;30;47m拟合模型传入的gs_names(模型参数：num_gs):\033[0m', data["gs_names"], '\033[1;30;47m     数量为:\033[0m', num_gs)
-            print('\033[1;30;47m拟合模型传入的num_fits:\033[0m', num_fit_initializations)
+            print(print_title('拟合模型传入的resource_names(模型参数：num_learns):{0} '.format(data["resource_names"]), colour='info', total_len=0))
+            print(print_title('拟合模型传入的gs_names(模型参数：num_gs):{0} '.format(data["gs_names"]), colour='info', total_len=0))
+            print(print_title('拟合模型传入的num_fits:{0} '.format(num_fit_initializations), colour='info', total_len=0))
         fit_em_list = []
         for i in range(num_fit_initializations):
             if self.print:
-                print('\n\033[1;30;43m    num_fits %s ......\n\033[0m' % i)
-                print('\033[1;30;47m    根据拟合模型传入的num_learns和num_gs的数量向model_uni函数请求初始化参数......\n\033[0m')
+                print(print_title('num_fits {0}'.format(i), colour='warning'))
+                print(print_title('根据拟合模型传入的num_learns和num_gs的数量向model_uni函数请求初始化参数......'.format(i), colour='info', total_len=0))
             fitmodel = random_model_uni.random_model_uni(num_resources=num_learns, num_subparts=num_gs, prints=self.print)
 
             if forgets:
@@ -412,9 +412,17 @@ class Model:
                     if var in fitmodel:
                         fitmodel[var] = self.fit_model[skill][var]
             if self.print:
-                print('\n\033[1;30;47m    拟合模型修正的初始化参数并传递给EM_fit（期望最大化EM函数）进行拟合运算:\n\033[0m', fitmodel)
+                print(print_title('拟合模型修正的初始化参数+观察矩阵，传递给EM_fit（期望最大化EM函数）进行拟合运算', colour='info'), fitmodel, '\n', data)
+                print()
+                print('隐马尔可夫模型有参数（π，A，B）,初始化参数中的pi_0=π，')
+                print('初始状态概率向量π = pi_0')
+                print('状态转移矩阵A = As')
+                print('观测(混淆)概率矩阵B = ')
+                print('prior：', fitmodel['prior'])
+                print('learns：', fitmodel['learns'][0])
+                print('guesses：', fitmodel['guesses'][0])
+                print('slips：', fitmodel['slips'][0])
             if not preload:
-                # print('传递给EM_fit的修正的初始化参数:\n', fitmodel)
                 fitmodel, log_likelihoods, fitmodel_list = EM_fit.EM_fit(model=fitmodel, data=data,
                                                                          parallel=self.parallel, prints=self.print)
 

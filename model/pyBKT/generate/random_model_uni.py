@@ -1,6 +1,8 @@
 import random
 import numpy as np
-from util import dirrnd
+from pyBKT.util import dirrnd
+from title.print_title import print_title
+
 
 def random_model_uni(num_resources=None,
                      num_subparts=None,
@@ -9,7 +11,7 @@ def random_model_uni(num_resources=None,
                      given_know_prior=None,
                      pi_0_prior=None,
                      prints=False):
-    if prints: print('\n\033[1;30;47m    model_uni计算中......\n\033[0m')
+    if prints: print(print_title('model_uni计算中......', colour='info', total_len=0))
     if num_resources is None:
         num_resources = 1
         if prints: print('num_resources未接收到传入参数，采用默认参数num_resources=%s' % num_resources)
@@ -87,8 +89,9 @@ def random_model_uni(num_resources=None,
     modelstruct['emissions'] = emissions
     modelstruct['pi_0'] = pi_0
     if prints:
-        print('\n\033[1;30;47m    model_uni经过伽马分布计算后响应的初始化参数为：\n\033[0m')
+        print(print_title('model_uni经过伽马分布计算后响应的初始化参数为', colour='info'))
         print(modelstruct)
+        # print(modelstruct)
     return modelstruct
 
 

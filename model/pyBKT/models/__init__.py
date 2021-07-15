@@ -1,1 +1,1 @@
-from models.Model import Model
+from pyBKT.models.Model import Model

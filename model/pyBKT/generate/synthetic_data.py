@@ -9,7 +9,7 @@
 import numpy as np
 from numpy.random import uniform
 from time import time
-from generate import synthetic_data_helper
+from pyBKT.generate import synthetic_data_helper
 
 def synthetic_data(model, lengths, resources = None):
     start = time()
