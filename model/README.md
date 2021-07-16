@@ -1,5 +1,7 @@
 *GitHub中md文档对数学公式不适配，强烈建议将文档下载到本地通过专业的md软件打开，推荐使用Typora*
 
+*亦或者参阅[BKT模型介绍.pdf](../static_files/BKT模型介绍.pdf)*
+
 <br>
 
 <br>
