@@ -2,11 +2,12 @@
 # @File : knowledge_atlas.py
 # @CreateTime : 2021/5/17 15:29
 # @Software : PyCharm
-# @Comment : 说明脚本的用处
+# @Comment : 知识图谱数据清洗
 
 from sql import PostgreSQL
 import pandas as pd
 import re
+from config import config_sql, tags_sql, atlas_sql
 
 
 def regexp_split_to_table(dict_list: list, columns: str):
@@ -61,58 +62,12 @@ def knowledge_join(join_data=None, from_df_tree=None, from_df_tags=None):
 
 # ====================================  获取原始数据
 # 知识点配置表
-config_sql = """
-    select 	id knowledge_id -- 知识点ID
-            ,name knowledge_name -- 知识点名称
-            ,(level+1) knowledge_level -- 知识点层级数量
-            ,case when level=0 then cast(id as varchar) else tree end as tree -- 知识点树结构
-            ,tags -- 知识点标签
-            ,create_time
-            ,update_time
-    from realtime_jy_work.ol_knowledge_config -- 知识点配置表
-    where subject_type=0 --数学,1为语文
-            and isdeleted=1 --是否删除,2为删除，注：可能存在用后再删除的情况
-            and id not in (61,1515,1522)
-            and split_part(tree,',',1) not in ('61','1515','1522')
-"""
 config_data = PostgreSQL().select(config_sql)
 
 # 题库标签表
-tags_sql = """
-    select 	id tags_id
-            ,name tags_name
-            ,(level+1) tags_level
-            ,create_time
-            ,update_time
-    from realtime_jy_work.ol_qb_tags -- 题库标签表
-    where isdeleted=1
-"""
 tags_data = PostgreSQL().select(tags_sql)
 
 # 知识图谱，列式表结构
-atlas_sql = """
-    select 	a.tree_id as knowledge_id -- 知识点id
-            ,b.name as knowledge_name -- 知识点名称
-            ,a.knowledge_level -- 知识点层级
-            ,a.tags_id as knowledge_tags_id -- 知识点标签id
-            ,c.name as knowledge_tags_name -- 知识点标签名称
-    from(
-        select 	id knowledge_id -- 知识点ID
-                ,name knowledge_name -- 知识点名称
-                ,(level+1) knowledge_level -- 知识点层级数量
-                ,case when level=0 then id else cast(regexp_split_to_table(tree,',') as int) end tree_id -- 知识点树结构
-                ,case when length(tags)=0 then null else cast(regexp_split_to_table(tags,',') as int) end tags_id -- 知识点标签
-        from realtime_jy_work.ol_knowledge_config -- 知识点配置表
-        where subject_type=0 --数学,1为语文
-                and isdeleted=1 --是否删除,2为删除，注：可能存在用后再删除的情况
-                and id not in (61,1515,1522)
-                and split_part(tree,',',1) not in ('61','1515','1522')
-    ) a
-    left join realtime_jy_work.ol_knowledge_config b on a.tree_id=b.id
-    left join realtime_jy_work.ol_qb_tags c on a.tags_id=c.id and c.isdeleted=1
-    group by 1,2,3,4,5
-    order by knowledge_id,knowledge_tags_id
-"""
 atlas_data = PostgreSQL().select(atlas_sql)
 
 

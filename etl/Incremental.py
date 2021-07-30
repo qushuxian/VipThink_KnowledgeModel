@@ -7,6 +7,7 @@ import re
 from sql import PostgreSQL
 import datetime
 from Email import Email
+from config import email_to_users
 
 pgsql = PostgreSQL()
 
@@ -38,8 +39,7 @@ class IncrementalData:
         :return:
         """
         if users is None:
-            users = ['jiaxiang.lin@happy-seed.com', 'ye.lu@happy-seed.com', 'lou.huang@happy-seed.com',
-                     'shuxian.qu@happy-seed.com', 'min.qu@happy-seed.com']
+            users = email_to_users
         body = bodys
         subject = subjects
         user = users

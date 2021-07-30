@@ -7,6 +7,7 @@
 from sql import PostgreSQL
 from functools import reduce
 import pandas as pd
+from config import sql_cr, sql_ksq, sql_questions, sql_testing
 
 
 def _class_questions(q_df, c_df):
@@ -49,57 +50,6 @@ def _class_questions(q_df, c_df):
     return crq_df
 
 
-sql_cr = """
-    select user_id,live_id,chapter_id,class_start_time,cn_numbers
-    from(
-        select  cr.user_id
-                ,cr.class_start_time
-                ,cr.cn_numbers
-                ,cr.live_id
-                ,cr.chapter_id
-            ,count(live_id) over (partition by cr.user_id,cr.chapter_id) check_num
-        from ods.class_room cr
-        where   cr.course_type in(1,6) 
-                and cr.live_status=2 
-                and cr.check_status=1 
-                and cr.cn_numbers>=42
-    )a
-    where a.check_num=1 -- 剔除一个知识点上课两节及以上
-"""
-sql_ksq = """
-    select  chapter_id,knowledge_id,knowledge_name,knowledge_level,knowledge_tree
-            ,count(case when questions_type=1 then knowledge_subject_level end) kz_cnt
-            ,count(case when questions_type=0 then knowledge_subject_level end) kh_cnt
-    from dwd.knowledge_should_questions
-    group by chapter_id,knowledge_id,knowledge_name,knowledge_level,knowledge_tree
-"""
-sql_questions = """
-    select 'qr' as types,a.user_id,a.chapter_id,a.level,a.status,a.create_time
-    from ods.questions_room a
-    inner join ods.class_room b on a.user_id=b.user_id and a.chapter_id=b.chapter_id
-    where   b.course_type in(1,6) 
-            and b.live_status=2 
-            and b.check_status=1 
-            and b.cn_numbers>=42
-    union all
-    select 'qw' as types,a.user_id,b.chapter_id,cast(a.level as varchar) levels,a.question_status status,a.create_time
-    from ods.questions_online_work a
-    inner join ods.class_room b on a.user_id=b.user_id and a.live_id=b.live_id
-    where   b.course_type in(1,6) 
-        and b.live_status=2 
-        and b.check_status=1 
-        and b.cn_numbers>=42
-        and a.question_status in(0,1)
-"""
-sql_testing = """
-    select user_id,knowledge_id,knowledge_is_grasp,testing_cnt,testing_success_cnt
-    from(
-    select 	a.user_id,a.knowledge_id,a.knowledge_is_grasp,a.knowledge_qa_cnt testing_cnt,a.knowledge_qa_success_cnt testing_success_cnt
-            ,count(1) over (partition by a.user_id,a.knowledge_id order by a.first_question_time) knowledge_qa_asc
-    from ods.subject_testing a
-    )testing
-    where testing.knowledge_qa_asc=1
-"""
 sql_list = [sql_cr, sql_ksq, sql_questions, sql_testing]
 
 # 获取数据并进行数据排序
